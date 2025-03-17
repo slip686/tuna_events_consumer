@@ -50,12 +50,14 @@ jobs:
           run: |
             cat docker-compose.yml | envsubst > docker-compose-secret.yml
         - name: copy docker compose config
-          run: scp docker-compose-secret.yml ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:docker-compose.yml
+          run: |
+            scp docker-compose-secret.yml ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:docker-compose.yml
+            scp -r data ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:data
         - name: connect and pull
           run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker-compose pull && docker-compose up -d && exit"
         - name: cleanup config
           if: always()
-          run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "rm docker-compose.yml"
+          run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "rm docker-compose.yml && rm -r data"
         - name: cleanup keys
           if: always()
           run: rm -rf ~/.ssh docker-compose-secret.yml
