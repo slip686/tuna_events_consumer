@@ -377,4 +377,4 @@ services:
       - clickhouse-node3
       - clickhouse-node4
     ports:
-      - "3040:3040"
+      - "3041:3041"
