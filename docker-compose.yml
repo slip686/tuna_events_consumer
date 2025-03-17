@@ -5,7 +5,6 @@ services:
     image: zookeeper:3.8
     container_name: zookeeper
     hostname: zookeeper
-    command: bash -c "docker stop zookeeper && docker rm zookeeper"
 
   clickhouse-node1:
     image: clickhouse/clickhouse-server:23
