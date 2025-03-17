@@ -1,0 +1,8 @@
+aiochclient~=2.6.0
+aiohttp~=3.11.14
+sqlalchemy~=2.0.39
+uvicorn~=0.34.0
+fastapi~=0.115.11
+python-dotenv~=1.0.1
+clickhouse_sqlalchemy~=0.3.2
+kafka-python~=2.0.2

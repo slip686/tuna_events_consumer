@@ -10,6 +10,6 @@ RUN apt update && apt install -y --no-install-recommends nano git  \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install -r /app/requirements.txt
-EXPOSE 3040
+EXPOSE 3050
 
 ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
