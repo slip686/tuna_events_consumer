@@ -10,119 +10,119 @@ services:
     image: clickhouse/clickhouse-server:23
     container_name: clickhouse-node1
     hostname: clickhouse-node1
-    entrypoint: [ '/bin/sh', '-c' ]
-    command: |
-      "
-      /entrypoint.sh &
-      while ! clickhouse-client -q 'SHOW databases;'; do
-          echo waiting for clickhouse up
-          sleep 1
-      done
-      clickhouse-client -q 'CREATE DATABASE IF NOT EXISTS shard;'
-      clickhouse-client -q
-      'CREATE TABLE IF NOT EXISTS shard.playback_events (
-          id Int64,
-          user_id Int64,
-          timestamp DateTime,
-          event_type String,
-          user_name String,
-          user_gender String,
-          user_age Int8,
-          user_subscribed Bool,
-          track_id Int64,
-          track_year Int16,
-          track_name String,
-          track_genres Array(String),
-          artists_names Array(String),
-          album_name String,
-          album_id Int64,
-          track_duration Int32,
-          track_elapsed_duration Int32
-      )
-        Engine=ReplicatedMergeTree('/clickhouse/tables/shard1/playback_events', 'playback_events_replica_1')
-        PARTITION BY toYYYYMMDD(timestamp) ORDER BY id;'
-      clickhouse-client -q
-      'CREATE TABLE IF NOT EXISTS shard.playlist_events (
-          id Int64,
-          user_id Int64,
-          timestamp DateTime,
-          event_type String,
-          user_name String,
-          user_gender String,
-          user_age Int8,
-          user_subscribed Bool,
-          playlist_id Int64,
-          playlist_name String,
-          owner_id Int64,
-          track_ids Array(Int64)
-      )
-        Engine=ReplicatedMergeTree('/clickhouse/tables/shard1/playlist_events', 'playlist_events_replica_1')
-        PARTITION BY toYYYYMMDD(timestamp) ORDER BY id;'
-      clickhouse-client -q
-      'CREATE TABLE IF NOT EXISTS shard.user_account_events (
-          id Int64,
-          user_id Int64,
-          timestamp DateTime,
-          event_type String,
-          user_name String,
-          user_gender String,
-          user_age Int8,
-          user_subscribed Bool,
-      )
-        Engine=ReplicatedMergeTree('/clickhouse/tables/shard1/user_account_events', 'user_account_events_replica_1')
-        PARTITION BY toYYYYMMDD(timestamp) ORDER BY id;'
-      clickhouse-client -q
-      'CREATE TABLE IF NOT EXISTS default.playback_events (
-          id Int64,
-          user_id Int64,
-          timestamp DateTime,
-          event_type String,
-          user_name String,
-          user_gender String,
-          user_age Int8,
-          user_subscribed Bool,
-          track_id Int64,
-          track_year Int16,
-          track_name String,
-          track_genres Array(String),
-          artists_names Array(String),
-          album_name String,
-          album_id Int64,
-          track_duration Int32,
-          track_elapsed_duration Int32
-      )
-        ENGINE = Distributed('company_cluster', '', playback_events, rand());'
-      clickhouse-client -q
-      'CREATE TABLE IF NOT EXISTS default.playlist_events (
-          id Int64,
-          user_id Int64,
-          timestamp DateTime,
-          event_type String,
-          user_name String,
-          user_gender String,
-          user_age Int8,
-          user_subscribed Bool,
-          playlist_id Int64,
-          playlist_name String,
-          owner_id Int64,
-          track_ids Array(Int64)
-      )
-        ENGINE = Distributed('company_cluster', '', playlist_events, rand());'
-      clickhouse-client -q
-      'CREATE TABLE IF NOT EXISTS default.user_account_events (
-          id Int64,
-          user_id Int64,
-          timestamp DateTime,
-          event_type String,
-          user_name String,
-          user_gender String,
-          user_age Int8,
-          user_subscribed Bool,
-      )
-        ENGINE = Distributed('company_cluster', '', user_account_events, rand());'
-      
-      tail -f /dev/null
-      "
+#    entrypoint: [ '/bin/sh', '-c' ]
+#    command: |
+#      "
+#      /entrypoint.sh &
+#      while ! clickhouse-client -q 'SHOW databases;'; do
+#          echo waiting for clickhouse up
+#          sleep 1
+#      done
+#      clickhouse-client -q 'CREATE DATABASE IF NOT EXISTS shard;'
+#      clickhouse-client -q
+#      'CREATE TABLE IF NOT EXISTS shard.playback_events (
+#          id Int64,
+#          user_id Int64,
+#          timestamp DateTime,
+#          event_type String,
+#          user_name String,
+#          user_gender String,
+#          user_age Int8,
+#          user_subscribed Bool,
+#          track_id Int64,
+#          track_year Int16,
+#          track_name String,
+#          track_genres Array(String),
+#          artists_names Array(String),
+#          album_name String,
+#          album_id Int64,
+#          track_duration Int32,
+#          track_elapsed_duration Int32
+#      )
+#        Engine=ReplicatedMergeTree('/clickhouse/tables/shard1/playback_events', 'playback_events_replica_1')
+#        PARTITION BY toYYYYMMDD(timestamp) ORDER BY id;'
+#      clickhouse-client -q
+#      'CREATE TABLE IF NOT EXISTS shard.playlist_events (
+#          id Int64,
+#          user_id Int64,
+#          timestamp DateTime,
+#          event_type String,
+#          user_name String,
+#          user_gender String,
+#          user_age Int8,
+#          user_subscribed Bool,
+#          playlist_id Int64,
+#          playlist_name String,
+#          owner_id Int64,
+#          track_ids Array(Int64)
+#      )
+#        Engine=ReplicatedMergeTree('/clickhouse/tables/shard1/playlist_events', 'playlist_events_replica_1')
+#        PARTITION BY toYYYYMMDD(timestamp) ORDER BY id;'
+#      clickhouse-client -q
+#      'CREATE TABLE IF NOT EXISTS shard.user_account_events (
+#          id Int64,
+#          user_id Int64,
+#          timestamp DateTime,
+#          event_type String,
+#          user_name String,
+#          user_gender String,
+#          user_age Int8,
+#          user_subscribed Bool,
+#      )
+#        Engine=ReplicatedMergeTree('/clickhouse/tables/shard1/user_account_events', 'user_account_events_replica_1')
+#        PARTITION BY toYYYYMMDD(timestamp) ORDER BY id;'
+#      clickhouse-client -q
+#      'CREATE TABLE IF NOT EXISTS default.playback_events (
+#          id Int64,
+#          user_id Int64,
+#          timestamp DateTime,
+#          event_type String,
+#          user_name String,
+#          user_gender String,
+#          user_age Int8,
+#          user_subscribed Bool,
+#          track_id Int64,
+#          track_year Int16,
+#          track_name String,
+#          track_genres Array(String),
+#          artists_names Array(String),
+#          album_name String,
+#          album_id Int64,
+#          track_duration Int32,
+#          track_elapsed_duration Int32
+#      )
+#        ENGINE = Distributed('company_cluster', '', playback_events, rand());'
+#      clickhouse-client -q
+#      'CREATE TABLE IF NOT EXISTS default.playlist_events (
+#          id Int64,
+#          user_id Int64,
+#          timestamp DateTime,
+#          event_type String,
+#          user_name String,
+#          user_gender String,
+#          user_age Int8,
+#          user_subscribed Bool,
+#          playlist_id Int64,
+#          playlist_name String,
+#          owner_id Int64,
+#          track_ids Array(Int64)
+#      )
+#        ENGINE = Distributed('company_cluster', '', playlist_events, rand());'
+#      clickhouse-client -q
+#      'CREATE TABLE IF NOT EXISTS default.user_account_events (
+#          id Int64,
+#          user_id Int64,
+#          timestamp DateTime,
+#          event_type String,
+#          user_name String,
+#          user_gender String,
+#          user_age Int8,
+#          user_subscribed Bool,
+#      )
+#        ENGINE = Distributed('company_cluster', '', user_account_events, rand());'
+#
+#      tail -f /dev/null
+#      "
     ports:
       - "8123:8123"
       - "9000:9000"
@@ -135,71 +135,71 @@ services:
     image: clickhouse/clickhouse-server:23
     container_name: clickhouse-node2
     hostname: clickhouse-node2
-    entrypoint: [ '/bin/sh', '-c' ]
-    command: |
-      "
-      /entrypoint.sh &
-      while ! clickhouse-client -q 'SHOW databases;'; do
-          echo waiting for clickhouse up
-          sleep 1
-      done
-      clickhouse-client -q
-      'CREATE DATABASE IF NOT EXISTS replica;'
-      clickhouse-client -q
-      'CREATE TABLE IF NOT EXISTS replica.playback_events (
-          id Int64,
-          user_id Int64,
-          timestamp DateTime,
-          event_type String,
-          user_name String,
-          user_gender String,
-          user_age Int8,
-          user_subscribed Bool,
-          track_id Int64,
-          track_year Int16,
-          track_name String,
-          track_genres Array(String),
-          artists_names Array(String),
-          album_name String,
-          album_id Int64,
-          track_duration Int32,
-          track_elapsed_duration Int32
-      )
-        Engine=ReplicatedMergeTree('/clickhouse/tables/shard1/playback_events', 'playback_events_replica_2')
-        PARTITION BY toYYYYMMDD(timestamp) ORDER BY id;'
-      clickhouse-client -q
-      'CREATE TABLE IF NOT EXISTS replica.playlist_events (
-          id Int64,
-          user_id Int64,
-          timestamp DateTime,
-          event_type String,
-          user_name String,
-          user_gender String,
-          user_age Int8,
-          user_subscribed Bool,
-          playlist_id Int64,
-          playlist_name String,
-          owner_id Int64,
-          track_ids Array(Int64)
-      )
-        Engine=ReplicatedMergeTree('/clickhouse/tables/shard1/playlist_events', 'playlist_events_replica_2')
-        PARTITION BY toYYYYMMDD(timestamp) ORDER BY id;'
-      clickhouse-client -q
-      'CREATE TABLE IF NOT EXISTS replica.user_account_events (
-          id Int64,
-          user_id Int64,
-          timestamp DateTime,
-          event_type String,
-          user_name String,
-          user_gender String,
-          user_age Int8,
-          user_subscribed Bool,
-      )
-        Engine=ReplicatedMergeTree('/clickhouse/tables/shard1/user_account_events', 'user_account_events_replica_2')
-        PARTITION BY toYYYYMMDD(timestamp) ORDER BY id;'
-      
-      tail -f /dev/null
-      "
+#    entrypoint: [ '/bin/sh', '-c' ]
+#    command: |
+#      "
+#      /entrypoint.sh &
+#      while ! clickhouse-client -q 'SHOW databases;'; do
+#          echo waiting for clickhouse up
+#          sleep 1
+#      done
+#      clickhouse-client -q
+#      'CREATE DATABASE IF NOT EXISTS replica;'
+#      clickhouse-client -q
+#      'CREATE TABLE IF NOT EXISTS replica.playback_events (
+#          id Int64,
+#          user_id Int64,
+#          timestamp DateTime,
+#          event_type String,
+#          user_name String,
+#          user_gender String,
+#          user_age Int8,
+#          user_subscribed Bool,
+#          track_id Int64,
+#          track_year Int16,
+#          track_name String,
+#          track_genres Array(String),
+#          artists_names Array(String),
+#          album_name String,
+#          album_id Int64,
+#          track_duration Int32,
+#          track_elapsed_duration Int32
+#      )
+#        Engine=ReplicatedMergeTree('/clickhouse/tables/shard1/playback_events', 'playback_events_replica_2')
+#        PARTITION BY toYYYYMMDD(timestamp) ORDER BY id;'
+#      clickhouse-client -q
+#      'CREATE TABLE IF NOT EXISTS replica.playlist_events (
+#          id Int64,
+#          user_id Int64,
+#          timestamp DateTime,
+#          event_type String,
+#          user_name String,
+#          user_gender String,
+#          user_age Int8,
+#          user_subscribed Bool,
+#          playlist_id Int64,
+#          playlist_name String,
+#          owner_id Int64,
+#          track_ids Array(Int64)
+#      )
+#        Engine=ReplicatedMergeTree('/clickhouse/tables/shard1/playlist_events', 'playlist_events_replica_2')
+#        PARTITION BY toYYYYMMDD(timestamp) ORDER BY id;'
+#      clickhouse-client -q
+#      'CREATE TABLE IF NOT EXISTS replica.user_account_events (
+#          id Int64,
+#          user_id Int64,
+#          timestamp DateTime,
+#          event_type String,
+#          user_name String,
+#          user_gender String,
+#          user_age Int8,
+#          user_subscribed Bool,
+#      )
+#        Engine=ReplicatedMergeTree('/clickhouse/tables/shard1/user_account_events', 'user_account_events_replica_2')
+#        PARTITION BY toYYYYMMDD(timestamp) ORDER BY id;'
+#
+#      tail -f /dev/null
+#      "
     ports:
       - "8124:8123"
       - "9001:9000"
@@ -213,120 +213,120 @@ services:
     image: clickhouse/clickhouse-server:23
     container_name: clickhouse-node3
     hostname: clickhouse-node3
-    entrypoint: [ '/bin/sh', '-c' ]
-    command: |
-      "
-      /entrypoint.sh &
-      while ! clickhouse-client -q 'SHOW databases;'; do
-          echo waiting for clickhouse up
-          sleep 1
-      done
-      clickhouse-client -q
-      'CREATE DATABASE IF NOT EXISTS shard;'
-      clickhouse-client -q
-      'CREATE TABLE IF NOT EXISTS shard.playback_events (
-          id Int64,
-          user_id Int64,
-          timestamp DateTime,
-          event_type String,
-          user_name String,
-          user_gender String,
-          user_age Int8,
-          user_subscribed Bool,
-          track_id Int64,
-          track_year Int16,
-          track_name String,
-          track_genres Array(String),
-          artists_names Array(String),
-          album_name String,
-          album_id Int64,
-          track_duration Int32,
-          track_elapsed_duration Int32
-      )
-        Engine=ReplicatedMergeTree('/clickhouse/tables/shard2/playback_events', 'playback_events_replica_1')
-        PARTITION BY toYYYYMMDD(timestamp) ORDER BY id;'
-      clickhouse-client -q
-      'CREATE TABLE IF NOT EXISTS shard.playlist_events (
-          id Int64,
-          user_id Int64,
-          timestamp DateTime,
-          event_type String,
-          user_name String,
-          user_gender String,
-          user_age Int8,
-          user_subscribed Bool,
-          playlist_id Int64,
-          playlist_name String,
-          owner_id Int64,
-          track_ids Array(Int64)
-      )
-        Engine=ReplicatedMergeTree('/clickhouse/tables/shard2/playlist_events', 'playlist_events_replica_1')
-        PARTITION BY toYYYYMMDD(timestamp) ORDER BY id;'
-      clickhouse-client -q
-      'CREATE TABLE IF NOT EXISTS shard.user_account_events (
-          id Int64,
-          user_id Int64,
-          timestamp DateTime,
-          event_type String,
-          user_name String,
-          user_gender String,
-          user_age Int8,
-          user_subscribed Bool,
-      )
-        Engine=ReplicatedMergeTree('/clickhouse/tables/shard2/user_account_events', 'user_account_events_replica_1')
-        PARTITION BY toYYYYMMDD(timestamp) ORDER BY id;'
-      clickhouse-client -q
-      'CREATE TABLE IF NOT EXISTS default.playback_events (
-          id Int64,
-          user_id Int64,
-          timestamp DateTime,
-          event_type String,
-          user_name String,
-          user_gender String,
-          user_age Int8,
-          user_subscribed Bool,
-          track_id Int64,
-          track_year Int16,
-          track_name String,
-          track_genres Array(String),
-          artists_names Array(String),
-          album_name String,
-          album_id Int64,
-          track_duration Int32,
-          track_elapsed_duration Int32
-      )
-        ENGINE = Distributed('company_cluster', '', playback_events, rand());'
-      clickhouse-client -q
-      'CREATE TABLE IF NOT EXISTS default.playlist_events (
-          id Int64,
-          user_id Int64,
-          timestamp DateTime,
-          event_type String,
-          user_name String,
-          user_gender String,
-          user_age Int8,
-          user_subscribed Bool,
-          playlist_id Int64,
-          playlist_name String,
-          owner_id Int64,
-          track_ids Array(Int64)
-      )
-        ENGINE = Distributed('company_cluster', '', playlist_events, rand());'
-      clickhouse-client -q
-      'CREATE TABLE IF NOT EXISTS default.user_account_events (
-          id Int64,
-          user_id Int64,
-          timestamp DateTime,
-          event_type String,
-          user_name String,
-          user_gender String,
-          user_age Int8,
-          user_subscribed Bool,
-      )
-        ENGINE = Distributed('company_cluster', '', user_account_events, rand());'
-      
-      tail -f /dev/null
-      "
+#    entrypoint: [ '/bin/sh', '-c' ]
+#    command: |
+#      "
+#      /entrypoint.sh &
+#      while ! clickhouse-client -q 'SHOW databases;'; do
+#          echo waiting for clickhouse up
+#          sleep 1
+#      done
+#      clickhouse-client -q
+#      'CREATE DATABASE IF NOT EXISTS shard;'
+#      clickhouse-client -q
+#      'CREATE TABLE IF NOT EXISTS shard.playback_events (
+#          id Int64,
+#          user_id Int64,
+#          timestamp DateTime,
+#          event_type String,
+#          user_name String,
+#          user_gender String,
+#          user_age Int8,
+#          user_subscribed Bool,
+#          track_id Int64,
+#          track_year Int16,
+#          track_name String,
+#          track_genres Array(String),
+#          artists_names Array(String),
+#          album_name String,
+#          album_id Int64,
+#          track_duration Int32,
+#          track_elapsed_duration Int32
+#      )
+#        Engine=ReplicatedMergeTree('/clickhouse/tables/shard2/playback_events', 'playback_events_replica_1')
+#        PARTITION BY toYYYYMMDD(timestamp) ORDER BY id;'
+#      clickhouse-client -q
+#      'CREATE TABLE IF NOT EXISTS shard.playlist_events (
+#          id Int64,
+#          user_id Int64,
+#          timestamp DateTime,
+#          event_type String,
+#          user_name String,
+#          user_gender String,
+#          user_age Int8,
+#          user_subscribed Bool,
+#          playlist_id Int64,
+#          playlist_name String,
+#          owner_id Int64,
+#          track_ids Array(Int64)
+#      )
+#        Engine=ReplicatedMergeTree('/clickhouse/tables/shard2/playlist_events', 'playlist_events_replica_1')
+#        PARTITION BY toYYYYMMDD(timestamp) ORDER BY id;'
+#      clickhouse-client -q
+#      'CREATE TABLE IF NOT EXISTS shard.user_account_events (
+#          id Int64,
+#          user_id Int64,
+#          timestamp DateTime,
+#          event_type String,
+#          user_name String,
+#          user_gender String,
+#          user_age Int8,
+#          user_subscribed Bool,
+#      )
+#        Engine=ReplicatedMergeTree('/clickhouse/tables/shard2/user_account_events', 'user_account_events_replica_1')
+#        PARTITION BY toYYYYMMDD(timestamp) ORDER BY id;'
+#      clickhouse-client -q
+#      'CREATE TABLE IF NOT EXISTS default.playback_events (
+#          id Int64,
+#          user_id Int64,
+#          timestamp DateTime,
+#          event_type String,
+#          user_name String,
+#          user_gender String,
+#          user_age Int8,
+#          user_subscribed Bool,
+#          track_id Int64,
+#          track_year Int16,
+#          track_name String,
+#          track_genres Array(String),
+#          artists_names Array(String),
+#          album_name String,
+#          album_id Int64,
+#          track_duration Int32,
+#          track_elapsed_duration Int32
+#      )
+#        ENGINE = Distributed('company_cluster', '', playback_events, rand());'
+#      clickhouse-client -q
+#      'CREATE TABLE IF NOT EXISTS default.playlist_events (
+#          id Int64,
+#          user_id Int64,
+#          timestamp DateTime,
+#          event_type String,
+#          user_name String,
+#          user_gender String,
+#          user_age Int8,
+#          user_subscribed Bool,
+#          playlist_id Int64,
+#          playlist_name String,
+#          owner_id Int64,
+#          track_ids Array(Int64)
+#      )
+#        ENGINE = Distributed('company_cluster', '', playlist_events, rand());'
+#      clickhouse-client -q
+#      'CREATE TABLE IF NOT EXISTS default.user_account_events (
+#          id Int64,
+#          user_id Int64,
+#          timestamp DateTime,
+#          event_type String,
+#          user_name String,
+#          user_gender String,
+#          user_age Int8,
+#          user_subscribed Bool,
+#      )
+#        ENGINE = Distributed('company_cluster', '', user_account_events, rand());'
+#
+#      tail -f /dev/null
+#      "
     ports:
       - "8125:8123"
       - "9002:9000"
@@ -339,71 +339,71 @@ services:
     image: clickhouse/clickhouse-server:23
     container_name: clickhouse-node4
     hostname: clickhouse-node4
-    entrypoint: [ '/bin/sh', '-c' ]
-    command: |
-      "
-      /entrypoint.sh &
-      while ! clickhouse-client -q 'SHOW databases;'; do
-          echo waiting for clickhouse up
-          sleep 1
-      done
-      clickhouse-client -q
-      'CREATE DATABASE IF NOT EXISTS replica;'
-      clickhouse-client -q
-      'CREATE TABLE IF NOT EXISTS replica.playback_events (
-          id Int64,
-          user_id Int64,
-          timestamp DateTime,
-          event_type String,
-          user_name String,
-          user_gender String,
-          user_age Int8,
-          user_subscribed Bool,
-          track_id Int64,
-          track_year Int16,
-          track_name String,
-          track_genres Array(String),
-          artists_names Array(String),
-          album_name String,
-          album_id Int64,
-          track_duration Int32,
-          track_elapsed_duration Int32
-      )
-        Engine=ReplicatedMergeTree('/clickhouse/tables/shard2/playback_events', 'playback_events_replica_2')
-        PARTITION BY toYYYYMMDD(timestamp) ORDER BY id;'
-      clickhouse-client -q
-      'CREATE TABLE IF NOT EXISTS replica.playlist_events (
-          id Int64,
-          user_id Int64,
-          timestamp DateTime,
-          event_type String,
-          user_name String,
-          user_gender String,
-          user_age Int8,
-          user_subscribed Bool,
-          playlist_id Int64,
-          playlist_name String,
-          owner_id Int64,
-          track_ids Array(Int64)
-      )
-        Engine=ReplicatedMergeTree('/clickhouse/tables/shard2/playlist_events', 'playlist_events_replica_2')
-        PARTITION BY toYYYYMMDD(timestamp) ORDER BY id;'
-      clickhouse-client -q
-      'CREATE TABLE IF NOT EXISTS replica.user_account_events (
-          id Int64,
-          user_id Int64,
-          timestamp DateTime,
-          event_type String,
-          user_name String,
-          user_gender String,
-          user_age Int8,
-          user_subscribed Bool,
-      )
-        Engine=ReplicatedMergeTree('/clickhouse/tables/shard2/user_account_events', 'user_account_events_replica_2')
-        PARTITION BY toYYYYMMDD(timestamp) ORDER BY id;'
-      
-      tail -f /dev/null
-      "
+#    entrypoint: [ '/bin/sh', '-c' ]
+#    command: |
+#      "
+#      /entrypoint.sh &
+#      while ! clickhouse-client -q 'SHOW databases;'; do
+#          echo waiting for clickhouse up
+#          sleep 1
+#      done
+#      clickhouse-client -q
+#      'CREATE DATABASE IF NOT EXISTS replica;'
+#      clickhouse-client -q
+#      'CREATE TABLE IF NOT EXISTS replica.playback_events (
+#          id Int64,
+#          user_id Int64,
+#          timestamp DateTime,
+#          event_type String,
+#          user_name String,
+#          user_gender String,
+#          user_age Int8,
+#          user_subscribed Bool,
+#          track_id Int64,
+#          track_year Int16,
+#          track_name String,
+#          track_genres Array(String),
+#          artists_names Array(String),
+#          album_name String,
+#          album_id Int64,
+#          track_duration Int32,
+#          track_elapsed_duration Int32
+#      )
+#        Engine=ReplicatedMergeTree('/clickhouse/tables/shard2/playback_events', 'playback_events_replica_2')
+#        PARTITION BY toYYYYMMDD(timestamp) ORDER BY id;'
+#      clickhouse-client -q
+#      'CREATE TABLE IF NOT EXISTS replica.playlist_events (
+#          id Int64,
+#          user_id Int64,
+#          timestamp DateTime,
+#          event_type String,
+#          user_name String,
+#          user_gender String,
+#          user_age Int8,
+#          user_subscribed Bool,
+#          playlist_id Int64,
+#          playlist_name String,
+#          owner_id Int64,
+#          track_ids Array(Int64)
+#      )
+#        Engine=ReplicatedMergeTree('/clickhouse/tables/shard2/playlist_events', 'playlist_events_replica_2')
+#        PARTITION BY toYYYYMMDD(timestamp) ORDER BY id;'
+#      clickhouse-client -q
+#      'CREATE TABLE IF NOT EXISTS replica.user_account_events (
+#          id Int64,
+#          user_id Int64,
+#          timestamp DateTime,
+#          event_type String,
+#          user_name String,
+#          user_gender String,
+#          user_age Int8,
+#          user_subscribed Bool,
+#      )
+#        Engine=ReplicatedMergeTree('/clickhouse/tables/shard2/user_account_events', 'user_account_events_replica_2')
+#        PARTITION BY toYYYYMMDD(timestamp) ORDER BY id;'
+#
+#      tail -f /dev/null
+#      "
     ports:
       - "8126:8123"
       - "9003:9000"
