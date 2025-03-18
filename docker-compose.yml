@@ -12,9 +12,11 @@ services:
     hostname: clickhouse-node1
     entrypoint: [ '/bin/sh', '-c' ]
     command: |
-      "clickhouse-client --query
-      'CREATE DATABASE IF NOT EXISTS shard;
-      CREATE TABLE IF NOT EXISTS shard.playback_events (
+      "
+      /entrypoint.sh &&
+      clickhouse-client --query 'CREATE DATABASE IF NOT EXISTS shard;' &&
+      clickhouse-client --query
+      'CREATE TABLE IF NOT EXISTS shard.playback_events (
           id Int64,
           user_id Int64,
           timestamp DateTime,
@@ -129,9 +131,12 @@ services:
     hostname: clickhouse-node2
     entrypoint: [ '/bin/sh', '-c' ]
     command: |
-      "clickhouse-client --query
-      'CREATE DATABASE IF NOT EXISTS replica;
-      CREATE TABLE IF NOT EXISTS replica.playback_events (
+      "
+      /entrypoint.sh &&
+      clickhouse-client --query
+      'CREATE DATABASE IF NOT EXISTS replica;' &&
+      clickhouse-client --query
+      'CREATE TABLE IF NOT EXISTS replica.playback_events (
           id Int64,
           user_id Int64,
           timestamp DateTime,
@@ -197,9 +202,12 @@ services:
     hostname: clickhouse-node3
     entrypoint: [ '/bin/sh', '-c' ]
     command: |
-      "clickhouse-client --query
-      'CREATE DATABASE IF NOT EXISTS shard;
-      CREATE TABLE IF NOT EXISTS shard.playback_events (
+      "
+      /entrypoint.sh &&
+      clickhouse-client --query
+      'CREATE DATABASE IF NOT EXISTS shard;' &&
+      clickhouse-client --query
+      'CREATE TABLE IF NOT EXISTS shard.playback_events (
           id Int64,
           user_id Int64,
           timestamp DateTime,
@@ -313,9 +321,12 @@ services:
     hostname: clickhouse-node4
     entrypoint: [ '/bin/sh', '-c' ]
     command: |
-      "clickhouse-client --query
-      'CREATE DATABASE IF NOT EXISTS replica;
-      CREATE TABLE IF NOT EXISTS replica.playback_events (
+      "
+      /entrypoint.sh &&
+      clickhouse-client --query
+      'CREATE DATABASE IF NOT EXISTS replica;' &&
+      clickhouse-client --query
+      'CREATE TABLE IF NOT EXISTS replica.playback_events (
           id Int64,
           user_id Int64,
           timestamp DateTime,
@@ -352,8 +363,9 @@ services:
           track_ids Array(Int64)
       )
         Engine=ReplicatedMergeTree('/clickhouse/tables/shard2/playlist_events', 'playlist_events_replica_2')
-        PARTITION BY toYYYYMMDD(timestamp) ORDER BY id;'&&
-      CREATE TABLE IF NOT EXISTS replica.user_account_events (
+        PARTITION BY toYYYYMMDD(timestamp) ORDER BY id;' &&
+      clickhouse-client --query
+      'CREATE TABLE IF NOT EXISTS replica.user_account_events (
           id Int64,
           user_id Int64,
           timestamp DateTime,
