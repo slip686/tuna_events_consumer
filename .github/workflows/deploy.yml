@@ -55,7 +55,7 @@ jobs:
           run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker-compose pull && docker-compose up -d && exit"
         - name: cleanup config
           if: always()
-          run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "rm docker-compose.yml && rm -r data"
+          run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "rm docker-compose.yml"
         - name: cleanup keys
           if: always()
           run: rm -rf ~/.ssh docker-compose-secret.yml
