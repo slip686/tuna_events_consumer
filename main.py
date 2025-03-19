@@ -9,8 +9,8 @@ from db.db import bind_topic_to_ch
 from utils import connect_routers
 import routers
 
-app = FastAPI(root_path='/events_database', docs_url='/docs', title='События',
-              description='Сервис для получения событий',
+app = FastAPI(root_path='/events_database', docs_url='/docs', title='Чтение событий',
+              description='Сервис для чтения событий из БД',
               swagger_ui_parameters={"docExpansion": "none", "defaultModelsExpandDepth": -1})
 
 connect_routers(app, routers)

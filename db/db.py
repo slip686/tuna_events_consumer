@@ -16,10 +16,14 @@ async def ch_select_query(tbl_obj: Table, params: dict):
     async with ClientSession() as session:
         fields = ', '.join(params.get('fields', '*'))
         filters = add_object_filters(params, tbl_obj)
+        filters_string = ''
+        if filters:
+            if len(filters) > 1:
+                filters_string = 'WHERE ' + filters[0] + ' AND ' + ' AND '.join(filters[1:])
+            else:
+                filters_string = 'WHERE ' + filters[0]
         query = f"""
-        SELECT {fields} FROM {tbl_obj.name}
-        {'WHERE ' + filters[0] + ' AND ' + 'AND '.join(filters[1:]) if filters else ''}
-        FORMAT JSONEachRow
+        SELECT {fields} FROM {tbl_obj.name} {filters_string} FORMAT JSONEachRow
         """
         client = ChClient(session, url=f"http://{CH_HOST}:{CH_HTTP_PORT}")
         rows = await client.fetch(query)
