@@ -15,9 +15,9 @@ services:
       - CH_PWD=123
       - CH_NAME=default
       - HOST=0.0.0.0
-      - PORT=3041
+      - PORT=3050
     ports:
-      - "3041:3041"
+      - "3050:3050"
     networks:
       - kafka-ch
 
