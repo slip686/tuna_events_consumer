@@ -17,4 +17,5 @@ def connect_routers(app: FastAPI, routers: __import__):
 def get_topics():
     admin_client = KafkaAdminClient(bootstrap_servers=KAFKA_BOOTSTRAP_SERVERS, client_id='admin')
     existing_topics = [_ for _ in admin_client.list_topics() if not _.startswith('__')]
+    admin_client.close()
     return existing_topics

@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 KAFKA_HOST = os.getenv('KAFKA_HOST') or 'kafka-0'
 KAFKA_PORT = int(os.getenv('KAFKA_PORT') or 9092)
 KAFKA_BOOTSTRAP_SERVERS = [f'{KAFKA_HOST}:{KAFKA_PORT}']
+KAFKA_CONSUMER_COMMON_CONFIG = {'bootstrap_servers': KAFKA_BOOTSTRAP_SERVERS, 'auto_offset_reset': 'earliest'}
 
 KAFKA_CH_CONSUMER_COMMON_CONFIG = (
     """
