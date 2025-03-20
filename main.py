@@ -1,4 +1,5 @@
 import asyncio
+from contextlib import asynccontextmanager
 
 import uvicorn
 from fastapi import FastAPI
@@ -9,30 +10,18 @@ from db.db import bind_topic_to_ch
 from utils import connect_routers
 import routers
 
+
+@asynccontextmanager
+async def at_startup(app: FastAPI):
+    tasks = [get_ch_tables(), bind_topic_to_ch()]
+    await asyncio.gather(*tasks)
+    yield
+
 app = FastAPI(root_path='/events_database', docs_url='/docs', title='Чтение событий',
               description='Сервис для чтения событий из БД',
-              swagger_ui_parameters={"docExpansion": "none", "defaultModelsExpandDepth": -1})
+              swagger_ui_parameters={"docExpansion": "none", "defaultModelsExpandDepth": -1}, lifespan=at_startup)
 
 connect_routers(app, routers)
 
-
-def start_uvicorn(loop):
-    config = uvicorn.Config(app, host=HOST, port=PORT, workers=3, loop=loop)
-    server = uvicorn.Server(config)
-    loop.run_until_complete(server.serve())
-
-
-def load_tables(loop):
-    loop.create_task(get_ch_tables())
-
-
-def bind_topics(loop):
-    loop.create_task(bind_topic_to_ch())
-
-
 if __name__ == "__main__":
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    bind_topics(loop)
-    load_tables(loop)
-    start_uvicorn(loop)
+    uvicorn.run("main:app", host=HOST, port=PORT, reload=False, workers=3)
