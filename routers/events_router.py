@@ -19,7 +19,8 @@ async def get_playback_events(parameters: str = '{}'):
 @router.get('/playback/stream')
 async def get_playback_events_stream(request: Request):
     """Получение событий проигрывателя из очереди"""
-    return StreamingResponse(EventsConsumer('playback_events', request).get_events_stream(), media_type='text/html')
+    return StreamingResponse(EventsConsumer('playback_events', request).get_events_stream(),
+                             media_type='text/html; charset=utf-8')
 
 
 @router.get('/playback/fields')
