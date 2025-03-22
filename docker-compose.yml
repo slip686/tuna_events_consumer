@@ -33,7 +33,7 @@ services:
     entrypoint: [ '/bin/sh', '-c' ]
     command: |
       "
-      /entrypoint.sh &
+      /entrypoint.sh &&
       while ! clickhouse-client -q \"SHOW databases;\"; do
           echo waiting for clickhouse up
           sleep 1
@@ -148,7 +148,7 @@ services:
     entrypoint: [ '/bin/sh', '-c' ]
     command: |
       "
-      /entrypoint.sh &
+      /entrypoint.sh &&
       while ! clickhouse-client -q \"SHOW databases;\"; do
           echo waiting for clickhouse up
           sleep 1
@@ -221,7 +221,7 @@ services:
     entrypoint: [ '/bin/sh', '-c' ]
     command: |
       "
-      /entrypoint.sh &
+      /entrypoint.sh &&
       while ! clickhouse-client -q \"SHOW databases;\"; do
           echo waiting for clickhouse up
           sleep 1
@@ -336,7 +336,7 @@ services:
     entrypoint: [ '/bin/sh', '-c' ]
     command: |
       "
-      /entrypoint.sh &
+      /entrypoint.sh &&
       while ! clickhouse-client -q \"SHOW databases;\"; do
           echo waiting for clickhouse up
           sleep 1
