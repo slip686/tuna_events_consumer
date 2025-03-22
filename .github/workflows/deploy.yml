@@ -52,8 +52,10 @@ jobs:
         - name: copy docker compose config
           run: scp docker-compose-secret.yml ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:docker-compose.yml
         - name: creating ch config data directory
-          run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "echo ${{ secrets.SSH_SUDO_ASKPASS }} | sudo -S mkdir
-            -p data"
+          run: |
+            ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "echo ${{ secrets.SSH_SUDO_ASKPASS }} | sudo -S 
+            mkdir -p data" && echo ${{ secrets.SSH_SUDO_ASKPASS }} | sudo -S chown -R ${{ secrets.SSH_USER }}:${{ 
+            secrets.SSH_USER }} data"
         - name: copy ch config data
           run: scp -r data ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:data
         - name: connect and pull
@@ -61,9 +63,9 @@ jobs:
         - name: cleanup config
           if: always()
           run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "rm docker-compose.yml"
-        - name: cleanup ch config
-          if: always()
-          run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "rm -rf data"
+#        - name: cleanup ch config
+#          if: always()
+#          run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "rm -rf data"
         - name: cleanup keys
           if: always()
           run: rm -rf ~/.ssh docker-compose-secret.yml
