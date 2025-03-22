@@ -52,7 +52,8 @@ jobs:
         - name: copy docker compose config
           run: scp docker-compose-secret.yml ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:docker-compose.yml
         - name: creating ch config data directory
-          run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "mkdir -p data"
+          run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "echo ${{ secrets.SSH_SUDO_ASKPASS }} | sudo mkdir
+            -p data"
         - name: copy ch config data
           run: scp -r data ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:data
         - name: connect and pull
