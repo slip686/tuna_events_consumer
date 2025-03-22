@@ -11,23 +11,23 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-    build:
-        name: Build
-        runs-on: ubuntu-latest
-
-        steps:
-        - uses: actions/checkout@v3
-        - name: Login
-          run: |
-            echo ${{ secrets.PAT }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-        - name: Build and Publish
-          run: |
-            docker build . --tag ${{ env.DOCKER_TAG }}
-            docker push ${{ env.DOCKER_TAG }}
+#    build:
+#        name: Build
+#        runs-on: ubuntu-latest
+#
+#        steps:
+#        - uses: actions/checkout@v3
+#        - name: Login
+#          run: |
+#            echo ${{ secrets.PAT }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+#        - name: Build and Publish
+#          run: |
+#            docker build . --tag ${{ env.DOCKER_TAG }}
+#            docker push ${{ env.DOCKER_TAG }}
 
     deploy:
       name: Deploy
-      needs: build
+#      needs: build
       runs-on: ubuntu-latest
       environment: production
 
@@ -54,15 +54,16 @@ jobs:
         - name: creating ch config data directory
           run: |
             ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "echo ${{ secrets.SSH_SUDO_ASKPASS }} | sudo -S 
-            mkdir -p data && echo ${{ secrets.SSH_SUDO_ASKPASS }} | sudo -S chown -R ${{ secrets.SSH_USER }}:${{ 
-            secrets.SSH_USER }} data"
-        - name: copy ch config data
-          run: scp -r data ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:data
-        - name: connect and pull
-          run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker-compose pull && docker-compose up -d && exit"
-        - name: cleanup config
-          if: always()
-          run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "rm docker-compose.yml"
+            mkdir -p data"
+#            && echo ${{ secrets.SSH_SUDO_ASKPASS }} | sudo -S chown -R ${{ secrets.SSH_USER }}:${{
+#            secrets.SSH_USER }} data"
+#        - name: copy ch config data
+#          run: scp -r data ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:data
+#        - name: connect and pull
+#          run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker-compose pull && docker-compose up -d && exit"
+#        - name: cleanup config
+#          if: always()
+#          run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "rm docker-compose.yml"
 #        - name: cleanup ch config
 #          if: always()
 #          run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "rm -rf data"
