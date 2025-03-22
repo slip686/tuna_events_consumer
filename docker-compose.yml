@@ -1,26 +1,6 @@
 version: '3'
 
 services:
-  tuna_events_consumer:
-    image: ghcr.io/slip686/tuna_events_consumer:latest
-    container_name: tuna_events_consumer
-    restart: always
-    environment:
-      - KAFKA_HOST=kafka-0
-      - KAFKA_PORT=9092
-      - CH_HOST=clickhouse-node1
-      - CH_TCP_PORT=9000
-      - CH_HTTP_PORT=8123
-      - CH_USER=admin
-      - CH_PWD=123
-      - CH_NAME=default
-      - HOST=0.0.0.0
-      - PORT=3050
-    ports:
-      - "3050:3050"
-    networks:
-      - kafka-ch
-
   zookeeper:
     image: zookeeper:3.8
     container_name: zookeeper
@@ -138,8 +118,6 @@ services:
       - ./data/node1:/etc/clickhouse-server
     depends_on:
       - zookeeper
-    networks:
-      kafka-ch:
 
   clickhouse-node2:
     image: clickhouse/clickhouse-server:23
@@ -211,8 +189,6 @@ services:
     depends_on:
       - zookeeper
       - clickhouse-node1
-    networks:
-      kafka-ch:
 
   clickhouse-node3:
     image: clickhouse/clickhouse-server:23
@@ -326,8 +302,6 @@ services:
       - ./data/node3:/etc/clickhouse-server
     depends_on:
       - zookeeper
-    networks:
-      kafka-ch:
 
   clickhouse-node4:
     image: clickhouse/clickhouse-server:23
@@ -399,8 +373,26 @@ services:
     depends_on:
       - zookeeper
       - clickhouse-node3
-    networks:
-      kafka-ch:
 
-networks:
-  kafka-ch:
+  tuna_events_consumer:
+    image: ghcr.io/slip686/tuna_events_consumer:latest
+    container_name: tuna_events_consumer
+    restart: always
+    environment:
+      - KAFKA_HOST=kafka-0
+      - KAFKA_PORT=9092
+      - CH_HOST=clickhouse-node1
+      - CH_TCP_PORT=9000
+      - CH_HTTP_PORT=8123
+      - CH_USER=admin
+      - CH_PWD=123
+      - CH_NAME=default
+      - HOST=0.0.0.0
+      - PORT=3050
+    ports:
+      - "3050:3050"
+    depends_on:
+      - clickhouse-node1
+      - clickhouse-node2
+      - clickhouse-node3
+      - clickhouse-node4
