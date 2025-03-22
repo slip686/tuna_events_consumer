@@ -51,6 +51,8 @@ jobs:
             cat docker-compose.yml | envsubst > docker-compose-secret.yml
         - name: copy docker compose config
           run: scp docker-compose-secret.yml ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:docker-compose.yml
+        - name: creating ch config data directory
+          run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "mkdir -p data"
         - name: copy ch config data
           run: scp -r data ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:data
         - name: connect and pull
