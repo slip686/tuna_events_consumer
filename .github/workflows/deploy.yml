@@ -61,12 +61,12 @@ jobs:
           run: scp -r data ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:data
         - name: connect and pull
           run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker-compose pull && docker-compose up -d && exit"
-        - name: cleanup config
-          if: always()
-          run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "rm docker-compose.yml"
-        - name: cleanup ch config
-          if: always()
-          run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "rm -r data"
+#        - name: cleanup config
+#          if: always()
+#          run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "rm docker-compose.yml"
+#        - name: cleanup ch config
+#          if: always()
+#          run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "rm -r data"
         - name: cleanup keys
           if: always()
           run: rm -rf ~/.ssh docker-compose-secret.yml
