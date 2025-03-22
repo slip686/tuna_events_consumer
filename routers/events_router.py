@@ -38,7 +38,8 @@ async def get_playlist_events(parameters: str = '{}'):
 @router.get('/playlist/stream')
 async def get_playlist_events_stream(request: Request):
     """Получение событий плейлистов из очереди"""
-    return StreamingResponse(EventsConsumer('playlist_events', request).get_events_stream(), media_type='text/html')
+    return StreamingResponse(EventsConsumer('playlist_events', request).get_events_stream(),
+                             media_type='text/html; charset=utf-8')
 
 
 @router.get('/playlist/fields')
@@ -56,7 +57,8 @@ async def get_user_account_events(parameters: str = '{}'):
 @router.get('/user/stream')
 async def get_user_account_events_stream(request: Request):
     """Получение событий аккаунта пользователя из очереди"""
-    return StreamingResponse(EventsConsumer('user_account_events', request).get_events_stream(), media_type='text/html')
+    return StreamingResponse(EventsConsumer('user_account_events', request).get_events_stream(),
+                             media_type='text/html; charset=utf-8')
 
 
 @router.get('/user/fields')
