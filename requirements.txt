@@ -6,3 +6,4 @@ fastapi~=0.115.11
 python-dotenv~=1.0.1
 clickhouse_sqlalchemy~=0.3.2
 kafka-python~=2.0.2
+sentry-sdk[fastapi]'
