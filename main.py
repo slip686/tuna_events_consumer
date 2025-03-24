@@ -1,6 +1,7 @@
 import asyncio
 from contextlib import asynccontextmanager
 
+import sentry_sdk
 import uvicorn
 from fastapi import FastAPI
 
@@ -9,6 +10,11 @@ from db import get_ch_tables
 from db.db import bind_topic_to_ch
 from utils import connect_routers
 import routers
+
+sentry_sdk.init(
+    dsn="https://442d577c31a358efd9a706063c10eb82@o4509033998909440.ingest.de.sentry.io/4509034251944016",
+    send_default_pii=True,
+)
 
 
 @asynccontextmanager
